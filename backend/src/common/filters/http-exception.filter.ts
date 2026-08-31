@@ -47,7 +47,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
           body.error = r.error;
         }
       }
-      body.error = body.error ?? HttpStatus[status] ?? 'Error';
+      body.error = HttpStatus[status] ?? 'Error';
     } else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       const prismaError = exception;
       if (prismaError.code === 'P2002') {

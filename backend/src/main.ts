@@ -35,6 +35,7 @@ async function bootstrap() {
     .setDescription('REST API for the Employee Management Portal assessment')
     .setVersion('1.0')
     .addBearerAuth()
+    .addSecurityRequirements('bearer')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api/docs', app, document);
