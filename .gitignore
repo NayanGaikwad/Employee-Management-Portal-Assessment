@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+
+# Prisma generated client
+backend/src/generated/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+
+# Test / coverage
+coverage/
+
+# Playwright
+playwright-report/
+test-results/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Local tooling / skill caches (not deliverables)
+backend/.agents/
+backend/.claude/
+backend/.windsurf/
+backend/skills-lock.json
+
+# Assessment source materials (not part of the deliverable)
+_temp/
