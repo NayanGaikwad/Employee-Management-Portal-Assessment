@@ -119,7 +119,7 @@ Employee create/update/soft-delete each write a correlated `AuditLog` row inside
 ## Tests
 ```bash
 npm test                # unit tests (Vitest) — auth + employees services
-npm run test:e2e        # e2e + database integration (uses employee_portal_test)
+npm run test:e2e        # e2e + database integration — auto-applies migrations to employee_portal_test first
 npm run test:api        # Postman/Newman API suite (server must be running)
 ```
 
