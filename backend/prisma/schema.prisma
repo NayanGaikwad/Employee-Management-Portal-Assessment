@@ -42,8 +42,8 @@ model RolePermission {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
+  id           Int        @id @default(autoincrement())
+  email        String     @unique
   passwordHash String
   roleId       Int
   role         Role       @relation(fields: [roleId], references: [id])
@@ -85,13 +85,13 @@ model Employee {
 }
 
 model AuditLog {
-  id         Int      @id @default(autoincrement())
-  entity     String
-  entityId   Int
-  action     String
-  byUserId   Int?
-  byUser     User?    @relation(fields: [byUserId], references: [id])
-  createdAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  entity    String
+  entityId  Int
+  action    String
+  byUserId  Int?
+  byUser    User?    @relation(fields: [byUserId], references: [id])
+  createdAt DateTime @default(now())
 
   @@index([entity, entityId])
 }

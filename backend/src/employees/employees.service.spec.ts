@@ -42,7 +42,12 @@ describe('EmployeesService', () => {
 
   describe('findAll', () => {
     it('builds pagination metadata and excludes soft-deleted employees', async () => {
-      const query: QueryEmployeesDto = { page: 1, pageSize: 20 };
+      const query: QueryEmployeesDto = {
+        page: 1,
+        pageSize: 20,
+        sort: EmployeeSortField.name,
+        direction: SortDirection.asc,
+      };
       mockPrisma.$transaction.mockResolvedValue([46, [{ id: 1 }]]);
 
       const result = await service.findAll(query);
@@ -105,7 +110,9 @@ describe('EmployeesService', () => {
 
     it('throws NotFoundException when the employee is missing or deleted', async () => {
       mockPrisma.employee.findFirst.mockResolvedValue(null);
-      await expect(service.findOne(9)).rejects.toBeInstanceOf(NotFoundException);
+      await expect(service.findOne(9)).rejects.toBeInstanceOf(
+        NotFoundException,
+      );
     });
   });
 
@@ -152,9 +159,11 @@ describe('EmployeesService', () => {
         name: 'Eng',
         status: DepartmentStatus.ACTIVE,
       });
-      mockPrisma.$transaction.mockImplementation(async (callback: (tx: unknown) => Promise<unknown>) => {
-        return callback(mockPrisma);
-      });
+      mockPrisma.$transaction.mockImplementation(
+        async (callback: (tx: unknown) => Promise<unknown>) => {
+          return callback(mockPrisma);
+        },
+      );
       mockPrisma.employee.create.mockResolvedValue({ id: 3, departmentId: 1 });
       mockPrisma.auditLog.create.mockResolvedValue({});
 
@@ -171,7 +180,12 @@ describe('EmployeesService', () => {
 
       expect(mockPrisma.employee.create).toHaveBeenCalled();
       expect(mockPrisma.auditLog.create).toHaveBeenCalledWith({
-        data: { entity: 'Employee', entityId: 3, action: 'CREATE', byUserId: 7 },
+        data: {
+          entity: 'Employee',
+          entityId: 3,
+          action: 'CREATE',
+          byUserId: 7,
+        },
       });
     });
   });

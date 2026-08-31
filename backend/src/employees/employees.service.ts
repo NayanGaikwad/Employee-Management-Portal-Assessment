@@ -3,7 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { DepartmentStatus, EmploymentStatus } from '../generated/prisma/enums.js';
+import {
+  DepartmentStatus,
+  EmploymentStatus,
+} from '../generated/prisma/enums.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { CreateEmployeeDto } from './dto/create-employee.dto.js';
 import {
@@ -86,7 +89,10 @@ export class EmployeesService {
   async update(id: number, dto: UpdateEmployeeDto, byUserId?: number) {
     const existing = await this.findOne(id);
 
-    if (dto.departmentId !== undefined && dto.departmentId !== existing.departmentId) {
+    if (
+      dto.departmentId !== undefined &&
+      dto.departmentId !== existing.departmentId
+    ) {
       await this.validateDepartment(dto.departmentId, true);
     }
 
@@ -166,7 +172,10 @@ export class EmployeesService {
     };
   }
 
-  private async validateDepartment(departmentId: number, requireActive: boolean) {
+  private async validateDepartment(
+    departmentId: number,
+    requireActive: boolean,
+  ) {
     const department = await this.prisma.department.findUnique({
       where: { id: departmentId },
     });

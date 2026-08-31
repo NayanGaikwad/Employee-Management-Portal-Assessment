@@ -4,7 +4,6 @@ import * as bcrypt from 'bcrypt';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../src/generated/prisma/client.js';
 import request from 'supertest';
-import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module.js';
 import { HttpExceptionFilter } from '../src/common/filters/http-exception.filter.js';
 
@@ -86,7 +85,7 @@ async function seedTestDb() {
 }
 
 describe('Employee Portal API (e2e)', () => {
-  let app: INestApplication<App>;
+  let app: INestApplication;
   let deptId: number;
   let adminToken: string;
   let viewerToken: string;
@@ -242,7 +241,6 @@ describe('Employee Portal API (e2e)', () => {
         .expect(404);
     });
   });
-
   describe('role-based access control', () => {
     it('allows a viewer to read but denies creating (403)', async () => {
       const reg = await request(app.getHttpServer())

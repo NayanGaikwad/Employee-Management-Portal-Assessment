@@ -47,7 +47,7 @@ describe('AuthService', () => {
     it('creates a user with hashed password and default role, returns a token', async () => {
       mockPrisma.user.findUnique.mockResolvedValue(null);
       mockPrisma.role.findUnique.mockResolvedValue({ id: 10, name: DEFAULT_ROLE });
-      mockBcrypt.hash.mockResolvedValue('hashed-password');
+      mockBcrypt.hash.mockResolvedValue('hashed-password' as never);
       mockPrisma.user.create.mockResolvedValue({ id: 5, email: 'a@b.com', roleId: 10 });
       mockJwt.signAsync.mockResolvedValue('jwt-token');
 
