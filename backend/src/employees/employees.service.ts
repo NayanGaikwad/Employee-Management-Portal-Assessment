@@ -129,7 +129,7 @@ export class EmployeesService {
     return this.prisma.$transaction(async (tx) => {
       const updated = await tx.employee.update({
         where: { id },
-        data: { deletedAt: new Date() },
+        data: { deletedAt: new Date(), status: 'INACTIVE' },
         include: { department: true },
       });
 
