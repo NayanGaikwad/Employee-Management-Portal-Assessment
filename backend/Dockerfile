@@ -41,6 +41,7 @@ EXPOSE 10000
 
 USER node
 
-# Render injects PORT. Migrate (idempotent) + seed reference data, then boot.
+# Render injects PORT. Migrate (idempotent) + seed reference data, then
+# optionally provision the admin (ADMIN_EMAIL/ADMIN_PASSWORD) if set, then boot.
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node dist/main"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && if [ -n \"$ADMIN_EMAIL\" ] && [ -n \"$ADMIN_PASSWORD\" ]; then npx tsx prisma/seed-admin.ts; fi && node dist/main"]

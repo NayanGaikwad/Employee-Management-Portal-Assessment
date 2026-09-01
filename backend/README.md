@@ -55,6 +55,7 @@ npm run db:seed
 npm run db:seed:admin   # uses ADMIN_EMAIL / ADMIN_PASSWORD from .env
 ```
 > This is the intended way to create elevated accounts — no default/known credentials are seeded in source.
+> In the Docker image, this runs automatically at startup whenever `ADMIN_EMAIL` and `ADMIN_PASSWORD` are set (e.g. on Render).
 
 ## Run
 ```bash
@@ -139,4 +140,4 @@ The collection covers: register, admin login (captures token), paginated list, s
 | `JWT_EXPIRES_IN` | Token lifetime (e.g. `1h`) |
 | `PORT` | HTTP port (default `3000`) |
 | `CORS_ORIGIN` | Allowed frontend origin |
-| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Used only by `npm run db:seed:admin` |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Admin provisioning (`npm run db:seed:admin`; auto-run at container startup when set) |
