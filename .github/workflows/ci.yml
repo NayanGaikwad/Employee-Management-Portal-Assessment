@@ -74,8 +74,8 @@ jobs:
 
       - name: Run API suite (Newman)
         run: |
-          npx prisma db seed
-          ADMIN_PASSWORD="Admin@12345" ADMIN_EMAIL="admin@test.com" tsx prisma/seed-admin.ts
+          npm run db:seed
+          ADMIN_PASSWORD="Admin@12345" ADMIN_EMAIL="admin@test.com" npm run db:seed:admin
           node dist/main.js &
           sleep 5
           npm run test:api
