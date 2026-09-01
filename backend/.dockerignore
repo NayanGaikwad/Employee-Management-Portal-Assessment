@@ -1,0 +1,25 @@
+# Dependencies / build artifacts
+node_modules
+dist
+build
+coverage
+*.tsbuildinfo
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Generated Prisma client
+src/generated
+
+# Tests / tooling
+test
+playwright-report
+test-results
+
+# VCS / OS
+.git
+.gitignore
+.DS_Store
+*.log
