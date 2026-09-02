@@ -12,7 +12,7 @@ This record documents the technology and architecture decisions made for the ass
 | Language | TypeScript (frontend and backend) | Chosen |
 | State management | TanStack Query + Router search params + TanStack Form | Chosen |
 | UI approach | shadcn/ui (Tailwind + Radix) | Chosen |
-| Component development | Storybook | Chosen |
+| Component development | Vitest + React Testing Library (no Storybook) | Chosen |
 | Form handling | TanStack Form + Zod | Chosen |
 | Backend | NestJS + Prisma | Chosen |
 | Database | PostgreSQL | Chosen |
@@ -94,18 +94,18 @@ Use **shadcn/ui** — a set of accessible, copy-paste components built on Tailwi
 | Material UI / full component library | Yes | Heavier dependency with opinionated theming that fights custom design; less hand-crafted and less demonstrable |
 | Hand-rolled `ui/` components | Yes | More implementation effort for accessibility and polish than copying vetted shadcn/ui primitives |
 
-## Component development: Storybook
+## Component development: Vitest + React Testing Library (Storybook removed)
 
 ### Decision
-Use **Storybook** to develop and document components in isolation, with `.stories.tsx` files alongside each component.
+Develop and verify components with **React Testing Library** component tests (plus a small set of presentational snapshot tests). **Storybook was considered, prototyped and then removed** — it is not required by the assessment, which is scoped to an internal portal implementation rather than a component-library deliverable.
 
-### Why
-- Enables interactive development of each component (loading/empty/error states, filters, forms) without standing up the full app.
-- Acts as living documentation of the component library for the panel.
-- Stories can be reviewed quickly and feed directly into snapshot/visual confidence.
+### Why RTL over Storybook
+- The required presentational states (loading, empty, error, filters, forms) are exercised directly through rendered component tests, which assert real behaviour (validation, interaction, role-based rendering) rather than just inviting manual inspection.
+- Component tests run headlessly in the same CI job as the unit tests — there is no extra build layer, dependency or separate dev server to maintain.
+- The assessment asks for a balanced testing strategy; Storybook's "living documentation" value does not map to any explicit rubric requirement, so dropping it avoids unused complexity (the rubric penalises over-engineering).
 
 ### Trade-off
-Storybook adds a build/config layer and a separate dev server. It is scoped to presentational components, not pages or full journeys (which are covered by component tests and Playwright).
+Isolation-based visual exploration of components is sacrificed. Where a component depends on router/query/toast context it is tested within those providers via test helpers rather than Storybook decorators. Full journeys remain covered by Playwright.
 
 ---
 
@@ -221,10 +221,9 @@ Employee create/update/soft-delete each write a correlated `AuditLog` row inside
 | Backend unit | Vitest | Service logic, validation, error handling — 13+ tests |
 | Database integration | Vitest + Supertest | Repository/API behaviour against a real test Postgres (unique email, FK, error statuses) |
 | API | Postman + Newman | Pagination, search/filter, create, reject invalid/duplicate, update, delete/deactivate, invalid IDs, 401/403 |
-| Frontend unit/component | Vitest + React Testing Library | Validation, loading/empty/error states, interaction — 3+ meaningful tests |
-| Snapshot tests | Vitest `toMatchSnapshot` | Presentational components (buttons, badges, table cells) to catch unintended UI drift |
-| Component docs | Storybook | `.stories.tsx` for each presentational component |
-| End-to-end | Playwright | Four critical journeys: list/search/filter; create; edit; failed/invalid operation |
+| Frontend unit/component | Vitest + React Testing Library | Validation, loading/empty/error states, interaction — 30 tests incl. a pure schema suite and snapshots |
+| Snapshot tests | Vitest `toMatchSnapshot` | Presentational components (type/status badges) to catch unintended UI drift |
+| End-to-end | Playwright | Five critical journeys: auth/login; list/search/filter; create; edit; soft-delete; plus departments |
 
 ### Why this split
 Coverage belongs where the risk lives: fast unit/component tests for behaviour and validation, a database/API integration test for the data layer, an executable API suite for the contract, snapshot tests to guard presentational components, and a small E2E suite for the critical journeys. This matches the brief's emphasis on a balanced strategy over sheer volume.
@@ -292,7 +291,7 @@ Both are documented as forward-looking production considerations, not implemente
 - **Single repo** — chosen for scope/reviewer convenience; production would likely split.
 - **Auth is implemented but role-management UI is not** — RBAC is data-driven and customizable in the DB; a role/permission admin UI would be added for production-grade administration.
 - **Soft-delete chosen over physical/status-deactivation** — single documented strategy per the brief; legacy rows accumulate and are excluded from all normal queries.
-- **Storybook adds a build/development layer** — scoped to presentational components only.
+- **Storybook was prototyped and removed** — not required by the assessment; component development is covered by RTL component tests plus snapshot tests (see the Component development section).
 - **Snapshot tests guard presentational drift but are not a substitute for behaviour tests** — kept focused on stable, presentational components.
 - **No queue/caching** — future considerations only, per above.
 - **Scaled testing volume** — a balanced suite is provided rather than exhaustive coverage, matching the brief's emphasis on meaningful tests over repetition.
