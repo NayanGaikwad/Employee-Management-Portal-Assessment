@@ -16,7 +16,12 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   app.enableCors({
-    origin: corsOrigin,
+    // Accept a comma-separated list so multiple frontend origins can be
+    // allowed (e.g. local dev + a deployed Vercel site).
+    origin: corsOrigin
+      .split(',')
+      .map((origin) => origin.trim())
+      .filter(Boolean),
     credentials: true,
   });
 
