@@ -6,7 +6,7 @@ const NAME = `E2E Employee ${randomSuffix()}`
 test.describe('employee management (admin)', () => {
   test('creates a new employee and shows it in the list', async ({ page }) => {
     await page.goto('/employees')
-    await page.getByRole('link', { name: 'Add employee' }).click()
+    await page.getByRole('main').getByRole('link', { name: 'Add employee' }).click()
     await expect(page).toHaveURL(/\/employees\/new/)
 
     await page.fill('input[name="fullName"]', NAME)
