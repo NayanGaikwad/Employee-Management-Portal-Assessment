@@ -78,6 +78,8 @@ The Playwright suite runs against a real seeded backend (via the Vite `/api` pro
 ## Deployment (Vercel)
 The frontend is a static SPA; output lives in `dist/`.
 1. Point the Vercel project at the `frontend/` directory (framework preset: Vite).
+   The `vercel.json` in this directory adds a catch-all rewrite to `index.html` so
+   client-side routes (e.g. `/employees`) don't 404 on refresh.
 2. Set an environment variable `VITE_API_BASE_URL` to the **deployed** backend base URL (e.g. `https://your-backend-host/api`). Vite inlines `VITE_*` vars at build time.
 3. Ensure the backend allows this origin — configure `CORS_ORIGIN` on the backend as a comma-separated list of allowed origins (see `backend/README.md`).
 
