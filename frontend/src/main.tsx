@@ -6,6 +6,7 @@ import { router } from '@/app/router'
 import { queryClient } from '@/app/query-client'
 import { AuthProvider, useAuth } from '@/lib/auth'
 import { ToastProvider } from '@/components/ui/toast'
+import { ColdStartGate } from '@/components/cold-start-gate'
 import '@/styles/globals.css'
 
 function App() {
@@ -22,8 +23,10 @@ function App() {
 const rootElement = document.getElementById('root')!
 createRoot(rootElement).render(
   <StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <ColdStartGate>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </ColdStartGate>
   </StrictMode>,
 )
